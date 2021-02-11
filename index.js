@@ -15,7 +15,7 @@ io.on('connection', (socket) => {
 	io.emit('chat message', 'User has Disconnected');
   });
 });
-io.emit('some event', { someProperty: 'some value', otherProperty: 'other value' , otherProperty: 'other value'}); // This will emit the event to all connected sockets
+io.emit('some event', { someProperty: 'some value', someProperty: 'other value' , otherProperty: 'other value'}); // This will emit the event to all connected sockets
 
 
 io.on('connection', (socket) => {
