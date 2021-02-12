@@ -27,9 +27,8 @@ io.on('connection', (socket) => {
 });
 
 io.on('connection', (socket) => {
-  socket.on('is typing', (typing) => {
-	  console.log(typing);
-	io.emit('is typing', typing);
+  socket.on('is typing', (typing , name) => {
+	io.emit('is typing', typing , name);
   });
 });
 
