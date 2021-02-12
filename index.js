@@ -27,6 +27,13 @@ io.on('connection', (socket) => {
 });
 
 io.on('connection', (socket) => {
+  socket.on('is typing', (typing) => {
+	  console.log(typing);
+	io.emit('is typing', typing);
+  });
+});
+
+io.on('connection', (socket) => {
   socket.on('chat message', (msg , name) => {
     console.log(name + ' '+ msg);
   });
