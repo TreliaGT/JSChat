@@ -10,17 +10,19 @@
       #input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
       #input:focus { outline: none; }
       #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
-	#emoji{cursor:pointer;}
-	#emojibox{background-color: #efefef;position: absolute;width: 200px;top: -188px;height: 188px;overflow-y: scroll;overflow-x: hidden;right: 4px;}
+	  #emoji , #emojibox > a{cursor:pointer;}
+	  #emojibox{background-color: #efefef;position: absolute;width: 200px;top: -188px;height: 188px;overflow-y: scroll;overflow-x: hidden;right: 4px;}
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages > li { padding: 0.5rem 1rem; }
       #messages > li:nth-child(odd) { background: #efefef; }
+	  #istyping {font-size:12px!important; width:55px; text-align:center;}
     </style>
   </head>
   <body>
     <ul id="messages"></ul>
     <form id="form" action="">
 	 <input id="input2" autocomplete="off" type="text" placeholder="name"/>
+	 <span id="istyping"></span>
       <input id="input" autocomplete="off" />  <div><div id="emojibox" style="display:none!important;"> 
 	  
 	  </div><span id="emoji">&#128512;</span></div><button>Send</button>
@@ -36,6 +38,8 @@
 	  var input2 = document.getElementById('input2');
 	  var emojibox = document.getElementById('emojibox');
 	  var emojibtn = document.getElementById('emoji');
+	  var typinginput = document.getElementById('istyping');
+	  var isTyping = false;
 	  
 	  form.addEventListener('submit', function(e) {
 		e.preventDefault();
@@ -43,7 +47,21 @@
 		  socket.emit('chat message', input.value , input2.value);
 		  input.value = '';
 		}
+		   isTyping = false;
+		   	console.log(isTyping);
+		   socket.emit('is typing', isTyping);
 	  });
+	  
+	  input.addEventListener("focus" , function(e) {
+			isTyping = true;
+			socket.emit('is typing', isTyping);
+	    });
+		
+	  input.addEventListener("blur", function(e) {
+			isTyping = false;
+			socket.emit('is typing', isTyping);
+	   });
+	  
 	  emojibtn.addEventListener('click', function(e) {
 		e.preventDefault();
 		  if (emojibox.style.display === "none") {
@@ -66,7 +84,16 @@
 				emojibox.appendChild(item);
 			}
 		});
-	
+		
+		socket.on('is typing', function(typeing) {
+			console.log(typeing);
+			if(typeing){
+				typinginput.innerHTML = 'Someone Is Typing';
+			}else{
+				typinginput.innerHTML = '';
+			}
+		  });
+		  
 	  socket.on('chat message', function(msg) {
 		var item = document.createElement('li');
 		item.textContent = msg;
