@@ -49,17 +49,17 @@
 		}
 		   isTyping = false;
 		   	console.log(isTyping);
-		   socket.emit('is typing', isTyping);
+		   socket.emit('is typing', isTyping , input2.value);
 	  });
 	  
 	  input.addEventListener("focus" , function(e) {
 			isTyping = true;
-			socket.emit('is typing', isTyping);
+			socket.emit('is typing', isTyping , input2.value);
 	    });
 		
 	  input.addEventListener("blur", function(e) {
 			isTyping = false;
-			socket.emit('is typing', isTyping);
+			socket.emit('is typing', isTyping , input2.value);
 	   });
 	  
 	  emojibtn.addEventListener('click', function(e) {
@@ -85,10 +85,10 @@
 			}
 		});
 		
-		socket.on('is typing', function(typeing) {
+		socket.on('is typing', function(typeing , name) {
 			console.log(typeing);
 			if(typeing){
-				typinginput.innerHTML = 'Someone Is Typing';
+				typinginput.innerHTML = name + ' Is Typing';
 			}else{
 				typinginput.innerHTML = '';
 			}
